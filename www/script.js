@@ -5,7 +5,7 @@ var socket = new WebSocket("wss://gotyper.herokuapp.com/connect" + params);
 socket.onmessage = function(msg) {
 
     // Show cursor and enable key presses when ready
-    if(msg.data == "goTyper:Ready") {
+    if (msg.data == "goTyper:Ready") {
         document.getElementById("cursor").style.display = "inline-block";
         document.onkeydown = function(e) {
             if (e.keyCode == 8) { // Backspace
@@ -13,6 +13,10 @@ socket.onmessage = function(msg) {
             }
             socket.send(e.keyCode);
         }
+    } else if (msg.data == "goTyper:End") {
+        document.getElementById("cursor").style.display = 'none';
+        document.onkeydown = null;
+        socket.close();
     } else {
         document.getElementById('terminal').innerHTML += msg.data;
     }

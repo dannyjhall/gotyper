@@ -35,17 +35,15 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	for {
-		if err := conn.WriteMessage(websocket.TextMessage, <-goTyper.Out); err != nil {
+	for msg := range goTyper.Out {
+		if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
 			log.Println(err)
 		}
 		// Not responding to actual key codes yet, just the key press
 		if _, _, err := conn.ReadMessage(); err != nil {
 			log.Println(err)
-			break
 		} else {
 			go goTyper.Type()
 		}
 	}
-
 }

@@ -30,6 +30,9 @@ func (t *Typer) Type() {
 		res := format(t.Buffer[t.Index : t.Index+t.Speed])
 		t.Out <- []byte(res)
 		t.Index += t.Speed
+	} else {
+		t.Out <- []byte("goTyper:End")
+		close(t.Out)
 	}
 }
 
